@@ -7,6 +7,8 @@ window.addEventListener('load', function () {
 
 });
 
+const user = JSON.parse(localStorage.getItem('loggedUser'));
+console.log(user.username);
 
 const refreshOrderSheetHeader = () => {
 
@@ -27,6 +29,8 @@ const refreshOrderSheetHeader = () => {
 
     customersList = ajaxGetRequest("/customer-master/findall");
     fillDataIntoDataListWithTwoValues(dataListCustomer, customersList, 'customer_name', 'customer_mobile');
+
+
 
 
 }
@@ -117,6 +121,7 @@ const saveOrUpdateOrderSheetHeader = () => {
         console.log("save part");
         if (errors == "") {
             //     no errors
+            orderSheetHeader.added_user = user.username
             const userConfirm = confirm(`Are you sure to add following Order sheet
             customer is ${orderSheetHeader.customer_master_id.customer_name}
             order date is ${orderSheetHeader.ordersheet_header_date};
@@ -145,13 +150,13 @@ const saveOrUpdateOrderSheetHeader = () => {
         orderSheetHeader.id = Number(getIDFromServer);
         orderSheetHeader.ordersheet_header_code = textOrderSheetHeaderKey.value;
         orderSheetHeader.ordersheet_header_number = textOrderSheetNO.value;
-
+            orderSheetHeader.update_user = user.username
         const userConfirm = confirm(`Are you sure to update following information
-            id is ${invoiceHeader.id}
+            id is ${orderSheetHeader.id}
             Header code is ${orderSheetHeader.ordersheet_header_code}
             Header Number Is ${orderSheetHeader.ordersheet_header_number}
             customer is ${orderSheetHeader.customer_master_id.customer_name}
-            order date is ${orderSheetHeader.ordersheet_header_date};
+            order date is ${orderSheetHeader.ordersheet_header_date}
             Payment type is ${orderSheetHeader.ordersheet_header_payment_type}
         `);
 

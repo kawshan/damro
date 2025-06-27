@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ordersheet_header")
@@ -43,6 +44,15 @@ public class OrderSheetHeader {
 
     @Column(name = "delete_user")
     private String delete_user;
+
+    @Column(name = "added_date_time")
+    private LocalDateTime added_date_time;
+
+    @Column(name = "modify_date_time")
+    private LocalDateTime modify_date_time;
+
+    @Column(name = "delete_date_time")
+    private LocalDateTime delete_date_time;
 
 
     @ManyToOne
