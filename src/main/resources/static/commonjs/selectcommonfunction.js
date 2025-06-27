@@ -68,7 +68,7 @@ const fillDataIntoDataList = (fieldId,dataList,property,selectedValue) =>{
 
 //define function into fill data into data list
 const fillDataIntoDataListWithTwoValues = (fieldId,dataList,property,propertyTwo,selectedValue)=>{
-    console.log("filll")
+    console.log("fill")
     fieldId.innerHTML='';//empting all inner htmls
 
     for (const ob of dataList){
