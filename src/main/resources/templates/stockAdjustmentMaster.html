@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Adjustment Master</title>
+
+
+    <!--    bootstrap cdn links-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="/commonjs/selectcommonfunction.js"></script>
+    <script src="/commonjs/jquery.js"></script>
+    <script src="/commonjs/validation.js"></script>
+    <script src="/commonjs/ajaxcommonfunction.js"></script>
+    <script src="/commonjs/tablecommonfuntion.js"></script>
+    <script src="/controllerjs/stockAdjustmentMaster.js"></script>
+
+
+
+    <!--    jquery cdn start-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+    <!--    jquery cdn end-->
+
+    <!--    google icons link-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+
+
+</head>
+<body>
+
+
+<div th:replace="~{navbar::navbar}"></div>
+
+<div th:replace="~{offcanvas::offcanvas}"></div>
+
+<!--header area start-->
+<div class="row p-4" style="background-color: #3C3D37;">
+    <h1 class="text-center" style="color: whitesmoke">Stock Adjustment Master</h1>
+</div>
+<!--header area start-->
+
+<!--  stock adjustment header area start  -->
+<div class="card p-4">
+    <form onsubmit="return false">
+
+
+        <!--button row start-->
+        <div class="row mb-2">
+
+
+            <div class="col-md-5">
+                <!--                div modify button 2 start-->
+                <div id="divModifyButton2" class="d-none">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-warning fw-bold"
+                                style="width: 15%; color: whitesmoke; border: 1px solid black;"
+                                onclick="refillStockAdjustmentMaster(window['editOb'],window['editRow'])">
+                            <i class="fa-solid fa-recycle fa-beat"></i> Refill
+                        </button>
+                        <button type="button" class="btn btn-danger fw-bold"
+                                style=" width: 15%; color: whitesmoke; border: 1px solid black; pointer-events: all"
+                                onclick="deleteStockAdjustmentHeader(window['editOb'],window['editRow'])">
+                            <i class="fa-solid fa-trash fa-beat"></i> Delete
+                        </button>
+                        <button onclick="printStockAdjustmentHeader(window['editOb'],window['editRow'])" type="button"
+                                class="btn btn-primary fw-bold"
+                                style=" width: 15%; color: whitesmoke;border: 1px solid black">
+                            <i class="fa-solid fa-eye fa-beat"></i> Print
+                        </button>
+
+
+                    </div>
+                </div>
+                <!--                div modify button 2 end-->
+            </div>
+
+
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger" onclick="window.location.reload();">reset</button>
+                <button type="button" class="btn btn-success" style="pointer-events: all" id="btnSubmitInvoiceHeader" onclick="saveOrUpdateStockAdjustmentHeader()">Submit</button>
+            </div>
+
+
+            <div class="col-md-4 text-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">Search</button>
+            </div>
+
+
+        </div>
+        <!--button row end-->
+        
+        
+        
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="textStockAdjustmentNumber" class="form-label">Number</label>
+                <input type="text" id="textStockAdjustmentNumber" disabled class="form-control text-start fw-bold" placeholder="" style="height: 60px" >
+            </div>
+            <div class="col-md-4">
+                <label for="textStockAdjustmentKey" class="form-label">Code</label>
+                <input type="text" id="textStockAdjustmentKey" disabled class="form-control text-start fw-bold" placeholder="" style="height: 60px" >
+            </div>
+            <div class="col-md-4">
+                <label for="textStockAdjustmentDate" class="form-label">Date <i class="text-danger fw-bolder">*</i> </label>
+                <input type="date" id="textStockAdjustmentDate"  class="form-control text-start fw-bold" placeholder="" style="height: 60px" onchange="textValidator(this,'','stockAdjustmentHeader','stock_adjustment_header_date')">
+            </div>
+        </div>
+
+
+        
+    </form>
+
+
+
+
+</div>
+<!--  stock adjustment header area end  -->
+
+
+<!--stock adjustment detail area start-->
+<div class="p-4">
+    <form onsubmit="return false">
+        <table class="table table-bordered" style="height: 100px">
+
+            <tr>
+
+                <td>
+                    <label for="selectItem" class="form-label">Item</label>
+                    <input type="text" list="dataListItem" id="selectItem" class="form-control text-start fw-bold" style="height: 60px" placeholder="Type & Search Item Short Code" onkeyup="dataListValidatorWithThreeValues(this,'itemList','stockAdjustmentDetails','item_master_id','item_short_name','item_code','item_barcode');">
+                    <datalist id="dataListItem"></datalist>
+                </td>
+
+
+                <td>
+                    <label for="textQuantity" class="form-label">Quantity</label>
+                    <input type="number" id="textQuantity" class="form-control text-start fw-bold" placeholder="Enter Quantity" style="height: 60px" onkeyup="textValidator(this,'','stockAdjustmentDetails','stock_adjustment_details_quantity')">
+                </td>
+
+
+                <td>
+                    <label for="textDescription" class="form-label">Description</label>
+                    <input type="text" id="textDescription" class="form-control text-start fw-bold" placeholder="Enter Description" style="height: 60px" onkeyup="textValidator(this,'','stockAdjustmentDetails','stock_adjustment_details_description')">
+                </td>
+
+                <td>
+                    <label for="textRate" class="form-label">Rate</label>
+                    <input type="number" id="textRate" class="form-control text-start fw-bold" placeholder="Enter Rate" style="height: 60px" onkeyup="textValidator(this,'','stockAdjustmentDetails','stock_adjustment_details_rate');">
+                </td>
+
+
+
+
+                <td class="text-end" style="padding-top: 20px">
+                    <button type="button" class="btn btn-lg btn-success" style="pointer-events: all" id="buttonStockAdjustmentDetailAdd" onclick="saveStockAdjustmentDetail()">Add</button>
+                    <button type="button" class="btn btn-lg btn-warning" style="pointer-events: all" id="buttonStockAdjustmentDetailUpdate" onclick="updateStockAdjustmentDetails()">Update</button>
+                </td>
+
+
+            </tr>
+
+
+        </table>
+    </form>
+
+
+    <div class="row">
+        <div class="col-md-5">
+            <!--                div modify button 2 start-->
+            <div id="divModifyButton3" class="d-none">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-warning fw-bold"
+                            style="width: 15%; color: whitesmoke; border: 1px solid black;"
+                            onclick="refillStockAdjustmentDetails(window['editOb'],window['editRow'])">
+                        <i class="fa-solid fa-recycle fa-beat"></i> Refill
+                    </button>
+                    <button type="button" class="btn btn-danger fw-bold"
+                            style=" width: 15%; color: whitesmoke; border: 1px solid black; pointer-events: all"
+                            onclick="deleteStockAdjustmentDetails(window['editOb'],window['editRow'])">
+                        <i class="fa-solid fa-trash fa-beat"></i> Delete
+                    </button>
+                    <button onclick="printStudent(window['editOb'],window['editRow'])" type="button"
+                            class="btn btn-primary fw-bold d-none"
+                            style=" width: 15%; color: whitesmoke;border: 1px solid black">
+                        <i class="fa-solid fa-eye fa-beat"></i> Print
+                    </button>
+                </div>
+            </div>
+            <!--                div modify button 2 end-->
+        </div>
+    </div>
+
+</div>
+<!--stock adjustment detail area end-->
+
+
+<!--stock adjustment details table area start-->
+<div class="d-none p-4" id="divStockAdjustmentDetail">
+    <table class="table table-bordered" id="tableStockAdjustmentDetail">
+        <thead>
+        <th>#</th>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Description</th>
+        <th>Rate</th>
+        <th>Action</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<!--stock adjustment details table area end-->
+
+
+<!--search model area start-->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">search</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <!--table stock adjustment header start-->
+                <div class="card m-4">
+                    <table class="table table-hover table-striped"  id="tableStockAdjustmentHeader">
+                        <thead>
+                        <th>#</th>
+                        <th>Number</th>
+                        <th>Key</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <!--table stock adjustment header end-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--search model area end-->
+
+
+
+<!--adjustment details print table area start-->
+<div id="divStockAdjustmentDetailsTableAreaPrint" class="d-none">
+    <table class="table table-bordered" style="border: 1px solid black; line-height: 5px; font-family: Verdana; font-size: 11px" id="tableStockAdjustmentDetailPrint">
+        <thead style="line-height: 10px" class="text-center">
+        <th>#</th>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Description</th>
+        <th>Rate</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<!--adjustment details print table area end-->
+
+
+
+
+
+</body>
+</html>
